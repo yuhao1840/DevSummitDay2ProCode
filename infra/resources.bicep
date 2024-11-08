@@ -90,10 +90,10 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
     reserved: true
   }
   sku: {
-    name: 'P0v3'
-    tier: 'Premium0V3'
-    size: 'P0v3'
-    family: 'Pv3'
+    name: 'S1'
+    tier: 'Standard'
+    size: 'S1'
+    family: 'S'
     capacity: 1
   }
   kind: 'linux'
@@ -107,9 +107,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
     serverFarmId: appServicePlan.id
     httpsOnly: true
     siteConfig: {
-      linuxFxVersion: 'node|18-lts'
-      alwaysOn: true
-      appCommandLine: 'next start'
+      linuxFxVersion: 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       appSettings: [ 
@@ -129,6 +127,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'AZURE_OPENAI_API_INSTANCE_NAME'
           value: openai_name
         }
+        // Removed model deployments to manually deploy
         // {
         //   name: 'AZURE_OPENAI_API_DEPLOYMENT_NAME'
         //   value: chatGptDeploymentName
@@ -193,6 +192,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       ]
     }
   }
+  kind: 'app,linux,container'
   identity: { type: 'SystemAssigned'}
 
   resource configLogs 'config' = {
@@ -296,10 +296,18 @@ resource searchService 'Microsoft.Search/searchServices@2022-09-01' = {
   name: search_name
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     partitionCount: 1
     publicNetworkAccess: 'enabled'
     replicaCount: 1
+    authOptions: {
+      aadOrApiKey: {
+        aadAuthFailureMode: 'http403'
+      }
+    }
   }
   sku: {
     name: searchServiceSkuName
@@ -324,6 +332,9 @@ resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openai_name
   location: openAiLocation
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
   kind: 'OpenAI'
   properties: {
     customSubDomainName: openai_name
