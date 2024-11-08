@@ -1,39 +1,45 @@
-
 .stApp > header {  
-    background-color: #f2f2f2;
-    color:#f8f8f8;  
-    padding:2rem;  
+    background-color: #fcfcfc;  
+    color: #ffffff;  
+    padding: 2rem;  
 }  
-
-.stApp{  
-    background-color: #ffffff;  
-    color:#000000;  
-    padding:2rem;  
+  
+.stApp {  
+    background-color: #fcfcfc;  
+    color: #000000;  
+    padding: 2rem;  
 }  
-
+  
 /* Sidebar styling */  
-[data-testid="stSidebar"]{  
-    background-color: #e9e7e7;
+[data-testid="stSidebar"] {  
+    background-color: #0a1e2e;  
     color: #ffffff;  
 }  
-
+  
+/* Ensure all text within the sidebar is white */  
+[data-testid="stSidebar"] * {  
+    color: #ffffff !important;  
+}  
+  
+/* Remove the sidebar image and add a title */  
 [data-testid="stSidebarNav"] {  
-    background-image: url(https://logolook.net/wp-content/uploads/2021/06/Microsoft-Logo.png);  
+    background-image: url(https://github.com/cjackson202/IceCreamBot/blob/main/bot/images/logo.png?raw=true);  
     background-repeat: no-repeat;  
     padding-top: 100px;  
-    background-position: 20px -10px;  
-    background-size: 300px;  
+    background-position: center 0px;  
+    background-size: 320px;  
 }  
   
 [data-testid="stSidebarNav"]::before {  
-    content: "";  
-    margin-left: 60px;  
+    content: "Navigation"; /* Add your desired title here */  
+    display: block;  
+    margin: 0 auto;  
     margin-top: 20px;  
-    font-size: 30px;  
-    position: relative;  
-    top: 100px;  
+    font-family: Georgia, 'Times New Roman', Times, serif;  
+    font-size: 20px;  
     font-weight: bold;  
     text-align: center;  
+    color: white;  
 }  
   
 /* Success message styling */  
@@ -47,8 +53,8 @@ h1 {
     color: #000400;  
     text-align: center;  
     margin-bottom: 20px;  
-    /* font-family:cursive; */
-    font-size: 70px;
+    font-family: Georgia, 'Times New Roman', Times, serif;  
+    font-size: 50px;  
 }  
   
 /* Select box styling */  
@@ -75,4 +81,35 @@ h1 {
 .css-1f6lu8k {  
     margin-top: 20px;  
     text-align: center;  
+}  
+  
+/* Modify the streamlit menu in top right corner */  
+.st-emotion-cache-w3nhqi.ef3psqc5 {  
+    color: black !important;  
+}  
+  
+.st-emotion-cache-1wbqy5l.e17vllj40 {  
+    color: black !important;  
+}  
+  
+.st-emotion-cache-jdyw56.en6cib60 {  
+    color: black !important;  
+}  
+
+.st-emotion-cache-cgqxho.ef3psqc6 {  
+    color: black !important;  
+}  
+
+
+/* Pages Menu styling */  
+.st-emotion-cache-1rtdyuf.eczjsme13 {  
+    color: #ffffff; /* This sets the text color to white */  
+}  
+  
+.st-emotion-cache-6tkfeg.eczjsme13 {  
+    color: #ffffff !important;  
+}  
+  
+.css-10trblm, .css-1r7vkyz, .css-2trqyj {  
+    color: black;  
 }  
