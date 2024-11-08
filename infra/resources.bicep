@@ -4,7 +4,8 @@ param resourceToken string
 param openai_api_version string
 
 param openAiLocation string
-param openAiSkuName string 
+param openAiSkuName string
+// Removing model deployments
 // param chatGptDeploymentCapacity int 
 // param chatGptDeploymentName string
 // param chatGptModelName string 
@@ -13,21 +14,25 @@ param openAiSkuName string
 // param embeddingDeploymentCapacity int
 // param embeddingModelName string 
 
+//Search Service and APIM SKU
 param searchServiceSkuName string = 'standard'
 param searchServiceIndexName string = 'icecream-chat'
-
 param apimSkuName string
 
-
+// Storage SkU
 param storageServiceSku object
 param storageServiceImageContainerName string
 
 param location string = resourceGroup().location
 
+// Servuce Principal
+param appSpId string
+// param appRegId string
+
 @secure()
 
 param tags object = {}
-
+// Service Names
 var openai_name = toLower('${name}-aillm-${resourceToken}')
 var acr_name = toLower('${replace(name, '-', '')}acr${resourceToken}')
 var search_name = toLower('${name}search${resourceToken}')
@@ -47,13 +52,11 @@ var la_workspace_name = toLower('${name}-la-${resourceToken}')
 var diagnostic_setting_name = 'AppServiceConsoleLogs'
 
 // Service Principal and permissions
-// var servicePrincipalName = '${name}-sp-${resourceToken}'
-// var contributorRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+var contributorRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
 var keyVaultSecretsOfficerRole = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b86a8fe4-44ce-4948-aee5-eccb2c155cd7')
-// var scriptIdentityName = toLower('${name}-mi-${resourceToken}')
 var validStorageServiceImageContainerName = toLower(replace(storageServiceImageContainerName, '-', ''))
 
-
+// Removing model deployments
 // var llmDeployments = [
 //   {
 //     name: chatGptDeploymentName
@@ -78,6 +81,7 @@ var validStorageServiceImageContainerName = toLower(replace(storageServiceImageC
 //   }
 // ]
 
+// App Service Plan
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: appservice_name
   location: location
@@ -94,7 +98,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
   kind: 'linux'
 }
-
+// App Service
 resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   name: webapp_name
   location: location
@@ -177,6 +181,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'AZURE_VISION_API_ENDPOINT'
           value: aiVisionService.properties.endpoint
         }
+        // Removing APIM to save on resource creation time, can add secret manually as necessary
         // {
         //   name: 'AZURE_APIM_API_KEY'
         //   value: '@Microsoft.KeyVault(VaultName=${kv.name};SecretName=${kv::APIM_API_KEY.name})'
@@ -200,7 +205,7 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
     }
   }
 }
-
+// Log analytics and diagnostic settings
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview' = {
   name: la_workspace_name
   location: location
@@ -221,6 +226,7 @@ resource webDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01
   }
 }
 
+// Key vault and secret creation
 resource kvFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: guid(kv.id, webApp.name, keyVaultSecretsOfficerRole)
   scope: kv
@@ -276,6 +282,7 @@ resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
       value: aiVisionService.listKeys().key1
     }
   }
+  // Removing APIM to save on resource creation time
   // resource APIM_API_KEY 'secrets' = {
   //   name: 'APIM_API_KEY'
   //   properties: {
@@ -312,10 +319,7 @@ resource aiVisionService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   }
 }
 
-// resource aiVisionApiKey 'Microsoft.CognitiveServices/accounts/listKeys/action@2023-05-01' = {
-//   parent: aiVisionService
-//   name: 'listKeys'
-// }
+// Azure OpenAI resource creation without additional model deployments
 resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openai_name
   location: openAiLocation
@@ -329,7 +333,7 @@ resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
     name: openAiSkuName
   }
 }
-
+// API Management Service
 resource apiManagementService 'Microsoft.ApiManagement/service@2021-08-01' = {
   name: apim_name
   location: location
@@ -356,20 +360,7 @@ resource apiManagementApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
     ]
   }
 }
-// Dont think I need this, and can have key vault grab this
-// resource apimServiceKeys 'Microsoft.ApiManagement/service/listKeys/action@2021-08-01' = {
-//   name: 'listKeys'
-//   parent: apiManagementService
-// }
-//
-// resource apimApiKey 'Microsoft.KeyVault/vaults/secrets@2021-06-01-preview' = {
-//   parent: kv
-//   name: 'APIM-API-KEY'
-//   properties: {
-//     contentType: 'text/plain'
-//     value: apimServiceKeys.properties.primaryKey
-//   }
-// }
+
 // @batchSize(1)
 // resource llmdeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = [for deployment in llmDeployments: {
 //   parent: azureopenai
@@ -385,7 +376,7 @@ resource apiManagementApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
 // }]
 
 
-// TODO: define good default Sku and settings for storage account
+// Storage and container creation
 resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
   name: storage_name
   location: location
@@ -403,6 +394,7 @@ resource storage 'Microsoft.Storage/storageAccounts@2022-05-01' = {
     }
   }
 }
+// ACR Creation for hosting Docker Image
 resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
   name: acr_name
   location: location
@@ -415,87 +407,17 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
 
       }
   }
-// Create user assigned identity to execute the deployment script
-// resource scriptIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2022-01-31-preview' = {
-//   name: scriptIdentityName
-//   location: location
-//   dependsOn: [
-//     subscription()
-//   ]
-// }
-// output scriptIdentityId string = scriptIdentity.properties.principalId
 
-// var scriptContent = '''
-// #!/bin/bash
-// set -e
-// # Create the application
-// app=$(az ad app create --display-name "${servicePrincipalName}" --query "{appId: appId, objectId: objectId}" --output json)
-// appId=$(echo $app | jq -r '.appId')
-// objectId=$(echo $app | jq -r '.objectId')
-// # Create the service principal
-// sp=$(az ad sp create --id $appId --query "{spId: appId}" --output json)
-// spId=$(echo $sp | jq -r '.spId')
-// # Output the results
-// echo "Application ID: $appId"
-// echo "Object ID: $objectId"
-// echo "Service Principal ID: $spId"
-// '''
-  // var scriptContent = '''
-  // $ErrorActionPreference = "Stop"
-  // # Create the application
-  // $app = az ad app create --display-name "${servicePrincipalName}" --query "{appId: appId, objectId: objectId}" | ConvertFrom-Json
-  // # Create the service principal
-  // $sp = az ad sp create --id $app.appId --query "{spId: appId}" | ConvertFrom-Json
-  // # Output the results
-  // Write-Output "Application ID: $($app.appId)"
-  // Write-Output "Object ID: $($app.objectId)"
-  // Write-Output "Service Principal ID: $($sp.spId)"
-  // '''
-  
-  // resource deploymentScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
-  //   name: 'createAadAppAndSp'
-  //   location: location
-  //   kind: 'AzureCLI'
-  //   identity: {
-  //     type: 'UserAssigned'
-  //     userAssignedIdentities: {
-  //       '${scriptIdentity.id}': {}
-  //     }
-  //   }
-  //   properties: {
-  //     azCliVersion: '2.60.0'
-  //     timeout: 'PT30M'
-  //     scriptContent: scriptContent
-  //     cleanupPreference: 'OnSuccess'
-  //     retentionInterval: 'P1D'
-  //   }
-  //   dependsOn: [
-  //     scriptIdentity
-  //   ]
-  // }
-
-  // resource miRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  //   scope: resourceGroup()
-  //   name: guid(resourceGroup().id, 'miRoleAssignment', contributorRoleId)
-  //   properties: {
-  //     roleDefinitionId: contributorRoleId
-  //     principalId: deploymentScript.identity.userAssignedIdentities[scriptIdentity.id].principalId
-  //     principalType: 'ServicePrincipal'
-  //   }
-  //   dependsOn: [
-  //     scriptIdentity
-  //   ]
-  // }
-  // resource spRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  //   name: guid(resourceGroup().id, deploymentScript.name, contributorRoleId)
-  //   scope: resourceGroup()
-  //   properties: {
-  //     roleDefinitionId: contributorRoleId
-  //     principalId: deploymentScript.properties.outputs.spId
-  //     principalType: 'ServicePrincipal'
-  //   }
-  // }
-  
+  // Permissions and RBAC
+  resource spRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+    name: guid(resourceGroup().id, contributorRoleId)
+    scope: resourceGroup()
+    properties: {
+      roleDefinitionId: contributorRoleId
+      principalId: appSpId
+      principalType: 'ServicePrincipal'
+    }
+  }
   resource AcrPullRole 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
     name: guid(webApp.id, 'AcrPull')
     scope: acr
@@ -509,6 +431,4 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
     ]
   }
 output url string = 'https://${webApp.properties.defaultHostName}'
-// output applicationId string = deploymentScript.properties.outputs.appId
-// output objectId string = deploymentScript.properties.outputs.objectId
-// output servicePrincipalId string = deploymentScript.properties.outputs.spId
+

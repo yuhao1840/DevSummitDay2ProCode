@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "name": {
-      "value": "icecreamchat-solution-8"
+      "value": "icecreamchat-solution-16"
     },
     "location": {
       "value": "eastus2"
