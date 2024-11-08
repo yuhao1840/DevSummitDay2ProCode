@@ -96,14 +96,13 @@ module resources 'resources.bicep' = {
 }
 
 // Output settings for the deployment
-output APP_URL string = resources.outputs.url // URL for the deployed app
-output AZURE_LOCATION string = location // Location
+output app_url string = resources.outputs.url // URL for the deployed app
 output appSpId string = appSp.id // Object ID for Enterprise Application, Is assigned Contributor to Resource Group
 output appRegId string = appReg.id // Object ID for App Registration
 output appServicePrincipalKey string = appReg.passwordCredentials[0].secretText // Secret for Service Principal
 output appServicePrincipalId string = appReg.appId // Application (Client) ID for Service Principal
-output AZURE_TENANT_ID string = tenant().tenantId // Tenant ID
-output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId // Subscription ID
-output AZURE_SUBSCRIPTION_NAME string = subscription().displayName // Subscription ID
+output azure_tenant_id string = tenant().tenantId // Tenant ID
+output azure_subscription_id string = subscription().subscriptionId // Subscription ID
+output azure_subscription_name string = subscription().displayName // Subscription ID
 
 
