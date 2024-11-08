@@ -276,13 +276,13 @@ resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
       value: aiVisionService.listKeys().key1
     }
   }
-  resource APIM_API_KEY 'secrets' = {
-    name: 'APIM_API_KEY'
-    properties: {
-      contentType: 'text/plain'
-      value: apiManagementService.listkeys().primaryKey
-    }
-  }
+  // resource APIM_API_KEY 'secrets' = {
+  //   name: 'APIM_API_KEY'
+  //   properties: {
+  //     contentType: 'text/plain'
+  //     value: apiManagementService.listkeys().primaryKey
+  //   }
+  // }
 }
 
 resource searchService 'Microsoft.Search/searchServices@2022-09-01' = {
