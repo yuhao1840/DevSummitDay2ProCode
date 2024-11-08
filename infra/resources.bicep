@@ -471,8 +471,8 @@ echo "Service Principal ID: $spId"
     }
   }
   resource miRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-    name: guid(resourceGroup().id, deploymentScript.name, contributorRoleId)
     scope: resourceGroup()
+    name: guid(resourceGroup().id, 'miRoleAssignment', contributorRoleId)
     properties: {
       roleDefinitionId: contributorRoleId
       principalId: deploymentScript.identity.userAssignedIdentities[scriptIdentity.id].principalId
