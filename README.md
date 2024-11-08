@@ -44,4 +44,4 @@ After deployment is complete, which will take several minutes, copy the followin
     },
 ```
 
-<img src="/Images/azdoutput.png?raw=true" />
+<!-- <img src="/Images/azdoutput.png?raw=true" /> -->
