@@ -16,4 +16,4 @@
 After deployment complete, which will take several minutes, copy the following outputs to a safe place for later use:
 app_url,appRegId,appRegKey,apSpId,and azure_tenant_Id
 
-<img src="/Images/adoutput.png?raw=true" />
+<img src="/Images/azdoutput.png?raw=true" />
