@@ -22,7 +22,8 @@
       "minLength": 1,
       "metadata": {
         "description": "Primary location for all resources"
-      }
+      },
+      "defaultValue": "eastus2"
     },
     "openAILocation": {
       "type": "string",

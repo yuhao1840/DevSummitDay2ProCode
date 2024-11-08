@@ -8,9 +8,9 @@ targetScope = 'subscription'
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
 param name string
+param project string
 
-
-param location string // Pulled from deployment or main.parameters.json
+param location string = 'eastus2' // Pulled from deployment or main.parameters.json
 
 // OpenAI settings
 param openAILocation string
@@ -37,10 +37,10 @@ param storageServiceSku object = { name: 'Standard_LRS' }
 param storageServiceImageContainerName string = 'images'
 
 // Generate a unique token for the resource group
-var resourceToken = toLower(uniqueString(subscription().id, name, location))
-var resourceGroupName = 'rg-${name}-${resourceToken}'
-var appreg_name = 'appreg-${name}-${resourceToken}'
-var tags = { 'Fed-dev-Summit': name }
+var resourceToken = toLower(uniqueString(subscription().id, project, location))
+var resourceGroupName = 'rg-${project}-${resourceToken}'
+var appreg_name = 'appreg-${project}-${resourceToken}'
+var tags = { 'Fed-dev-Summit': project }
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -72,7 +72,7 @@ module resources 'resources.bicep' = {
   name: 'all-resources'
   scope: rg
   params: {
-    name: name
+    project: project
     resourceToken: resourceToken
     tags: tags
     openai_api_version: openAIApiVersion
@@ -96,9 +96,14 @@ module resources 'resources.bicep' = {
 }
 
 // Output settings for the deployment
-output APP_URL string = resources.outputs.url
-output AZURE_LOCATION string = location
-output AZURE_TENANT_ID string = tenant().tenantId
-output appSpId string = appSp.id
-output appRegId string = appReg.id
-output appRegKey string = appReg.passwordCredentials[0].secretText
+output APP_URL string = resources.outputs.url // URL for the deployed app
+output AZURE_LOCATION string = location // Location
+output appSpId string = appSp.id // Object ID for Enterprise Application, Is assigned Contributor to Resource Group
+output appRegId string = appReg.id // Object ID for App Registration
+output appServicePrincipalKey string = appReg.passwordCredentials[0].secretText // Secret for Service Principal
+output appServicePrincipalId string = appReg.appId // Application (Client) ID for Service Principal
+output AZURE_TENANT_ID string = tenant().tenantId // Tenant ID
+output AZURE_SUBSCRIPTION_ID string = subscription().subscriptionId // Subscription ID
+output AZURE_SUBSCRIPTION_NAME string = subscription().displayName // Subscription ID
+
+

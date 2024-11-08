@@ -1,4 +1,4 @@
-param name string = 'icecream-demo'
+param project string = 'icecreamchat-solution'
 param resourceToken string
 
 param openai_api_version string
@@ -23,32 +23,30 @@ param apimSkuName string
 param storageServiceSku object
 param storageServiceImageContainerName string
 
-param location string = resourceGroup().location
+param location string
 
 // Servuce Principal
 param appSpId string
-// param appRegId string
-
 @secure()
 
 param tags object = {}
 // Service Names
-var openai_name = toLower('${name}-aillm-${resourceToken}')
-var acr_name = toLower('${replace(name, '-', '')}acr${resourceToken}')
-var search_name = toLower('${name}search${resourceToken}')
-var webapp_name = toLower('${name}-webapp-${resourceToken}')
-var appservice_name = toLower('${name}-app-${resourceToken}')
-var aivision_name = toLower('${name}-vision-${resourceToken}')
-var apim_name  = toLower('${name}-apim-${resourceToken}')
+var openai_name = toLower('${project}-aillm-${resourceToken}')
+var acr_name = toLower('${replace(project, '-', '')}acr${resourceToken}')
+var search_name = toLower('${project}search${resourceToken}')
+var webapp_name = toLower('${project}-webapp-${resourceToken}')
+var appservice_name = toLower('${project}-app-${resourceToken}')
+var aivision_name = toLower('${project}-vision-${resourceToken}')
+var apim_name  = toLower('${project}-apim-${resourceToken}')
 
 // storage name must be < 24 chars, alphanumeric only. 'sto' is 3 and resourceToken is 13
-var clean_name = replace(replace(name, '-', ''), '_', '')
+var clean_name = replace(replace(project, '-', ''), '_', '')
 var storage_prefix = take(clean_name, 8)
 var storage_name = toLower('${storage_prefix}sto${resourceToken}')
 // keyvault name must be less than 24 chars - token is 13
-var kv_prefix = take(name, 7)
+var kv_prefix = take(project, 7)
 var keyVaultName = toLower('${kv_prefix}-kv-${resourceToken}')
-var la_workspace_name = toLower('${name}-la-${resourceToken}')
+var la_workspace_name = toLower('${project}-la-${resourceToken}')
 var diagnostic_setting_name = 'AppServiceConsoleLogs'
 
 // Service Principal and permissions
@@ -319,7 +317,7 @@ resource aiVisionService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   tags: tags
   kind: 'ComputerVision'
   properties: {
-    customSubDomainName: '${name}-vision-${resourceToken}'
+    customSubDomainName: '${project}-vision-${resourceToken}'
     publicNetworkAccess: 'Enabled'
   }
   sku: {
