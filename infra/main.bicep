@@ -32,6 +32,7 @@ param storageServiceImageContainerName string = 'images'
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var resourceGroupName = 'rg-${name}-${resourceToken}'
 var tags = { 'Fed-dev-Summit': name }
+// var appDeveloperRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'c4e39bd9-1100-46d3-8c65-fb160da0071f')
 
 
 // Organize resources in a resource group
@@ -66,7 +67,18 @@ module resources 'resources.bicep' = {
     location: location
   }
 }
-
+// resource miRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+//   scope: subscription()
+//   name: guid(rg.id, 'miRoleAssignment')
+//   properties: {
+//     roleDefinitionId: appDeveloperRoleId
+//     principalId: resources.outputs.scriptIdentityId
+//     principalType: 'ServicePrincipal'
+//   }
+//   dependsOn: [
+//     resources
+//   ]
+// }
 output APP_URL string = resources.outputs.url
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
