@@ -108,6 +108,8 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
       linuxFxVersion: 'DOCKER|mcr.microsoft.com/appsvc/staticsite:latest'
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
+      alwaysOn: true
+      scmType: 'LocalGit'
       appSettings: [ 
         { 
           name: 'AZURE_KEY_VAULT_NAME'
