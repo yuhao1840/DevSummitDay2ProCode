@@ -30,14 +30,12 @@
       "metadata": {
         "description": "Primary location for all resources"
       },
-      "defaultValue": "eastus2"
+      "defaultValue": "eastus"
     },
     "openAILocation": {
       "type": "string",
       "allowedValues": [
-        "eastus",
-        "eastus2",
-        "westus"
+        "eastus"
       ],
       "metadata": {
         "azd": {
