@@ -5,6 +5,11 @@
 # Microsoft Federal Developer Summit – Day 2 Pro Code Track
 
 # Overview
+This repo is for the second day pro code track for Microsoft Federal Developer Summit on November 13th-14th, 20204.  It contains a Python Streamlit bot which leverages Azure OpenAI and AI Search.
+
+<p align="center">
+  <img src="/Images/icecreambotss.png?raw=true" />
+</p>
 
 ## Prerequisites
 **Github Codespaces** or
