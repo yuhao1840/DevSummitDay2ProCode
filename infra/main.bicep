@@ -10,7 +10,7 @@ targetScope = 'subscription'
 param name string
 param project string
 
-param location string = 'eastus' // Pulled from deployment or main.parameters.json
+param location string = 'eastus2' // Pulled from deployment or main.parameters.json
 
 // OpenAI settings
 param openAILocation string
@@ -92,6 +92,7 @@ module resources 'resources.bicep' = {
     apimSkuName: apimSkuName
     appSpId: appSp.id
     location: location
+    locationBackup: 'eastus'
   }
 }
 

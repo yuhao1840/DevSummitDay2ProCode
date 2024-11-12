@@ -24,7 +24,7 @@ param storageServiceSku object
 param storageServiceImageContainerName string
 
 param location string
-
+param locationAI string = 'eastus'
 // Servuce Principal
 param appSpId string
 @secure()
@@ -291,10 +291,10 @@ resource kv 'Microsoft.KeyVault/vaults@2021-06-01-preview' = {
   //   }
   // }
 }
-
+// Azure AI Search Service
 resource searchService 'Microsoft.Search/searchServices@2022-09-01' = {
   name: search_name
-  location: location
+  location: locationAI
   tags: tags
   identity: {
     type: 'SystemAssigned'
@@ -313,6 +313,7 @@ resource searchService 'Microsoft.Search/searchServices@2022-09-01' = {
     name: searchServiceSkuName
   }
 }
+// AI Vision Service
 resource aiVisionService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: aivision_name
   location: location
@@ -330,7 +331,7 @@ resource aiVisionService 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 // Azure OpenAI resource creation without additional model deployments
 resource azureopenai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: openai_name
-  location: openAiLocation
+  location: locationAI
   tags: tags
   identity: {
     type: 'SystemAssigned'
@@ -371,7 +372,22 @@ resource apiManagementApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
     ]
   }
 }
-
+// Multi-service account for Azure OpenAI Studio
+resource multiServiceAccount 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+  name: '${project}-multiservice-${resourceToken}'
+  location: locationAI
+  tags: tags
+  kind: 'CognitiveServices'
+  sku: {
+    name: 'S0'
+  }
+  properties: {
+    publicNetworkAccess: 'Enabled'
+  }
+  identity: {
+    type: 'SystemAssigned'
+  }
+}
 // @batchSize(1)
 // resource llmdeployment 'Microsoft.CognitiveServices/accounts/deployments@2023-05-01' = [for deployment in llmDeployments: {
 //   parent: azureopenai

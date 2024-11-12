@@ -19,8 +19,8 @@
 2. In newly created repo(in your account) launch a new Codespaces workspace
 3. Run `az login` - use Dev Summit provided login and password
 4. *Optional* Run `az account set -s <subscriptionId>` if more than one subscription is present
-5. Run `az deployment sub create --template-file main.bicep --parameters main.parameters.json --location eastus --parameters project="icecream-chat-*YOUR INITALS*"`
-
+5. Run `az deployment sub create --template-file main.bicep --parameters main.parameters.json --location eastus2 --parameters project="icecream-chat-*YOUR INITALS*"`
+*note*: Azure OpenAI, AI Search, and Multi-service account deploy within East US. To update this value change `param locationAI string = 'eastus'` within `resources.bicep` on line #27 or specify it as an additional parameter with `locationAI="<desiredRegion>"`
 After deployment is complete, which will take approximately 30-35 minutes (API Management is the long running process, the environment can start being used before that time but do not close the terminal session), copy the following outputs to a safe place for later use:
 `app_url`, `appServcePrincipalKey`, `appServicePrincipalId`, `azure_subscription_id`, `azure_subscripton_name`, and `azure_tenant_Id`
 ```json

@@ -6,13 +6,10 @@
       "value": "icecreamchat-solution"
     },
     "location": {
-      "value": "eastus"
+      "value": "eastus2"
     },
     "project": {
       "value": "icecreamchat"
-    },
-    "openAILocation": {
-      "value": "eastus"
     }
   }
 }
