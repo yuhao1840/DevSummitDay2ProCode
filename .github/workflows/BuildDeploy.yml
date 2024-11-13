@@ -4,10 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      imageTag:
-        description: 'Docker image tag:'
-        required: true
 
 jobs:
 
@@ -34,7 +30,7 @@ jobs:
         tenant: ${{ secrets.AZURE_TENANT_ID }}
         registry: icecreamchatsolutionlblickacrlh7n4czwniybc.azurecr.io
         repository: dev-summit/ice-cream-bot
-        tag: ${{ inputs.imageTag }}
+        tag: ${{ github.sha }}
         git_access_token: ${{ secrets.GITHUB_TOKEN }}
         folder: bot/
         dockerfile: ./Dockerfile
@@ -50,17 +46,17 @@ jobs:
         # Container registry server url
         login-server: icecreamchatsolutionlblickacrlh7n4czwniybc.azurecr.io
         
-    #- name: Azure WebApp
-    #  uses: Azure/webapps-deploy@v3.0.1
-    #  with:
-    #    # Name of the Azure Web App
-    #    app-name: icecreamchat-solution-lblick-webapp-lh7n4czwniybc
-    #    # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
-    #    images: icecreamchatsolutionlblickacrlh7n4czwniybc.azurecr.io/bot-app:${{ inputs.imageTag }}
-    #    # Enter the resource group name of the web app
-    #    resource-group-name: rg-icecreamchat-solution-lblick-lh7n4czwniybc
-    #    # Restart the app service after deployment
-    #    restart: true
+    - name: Azure WebApp
+      uses: Azure/webapps-deploy@v3.0.1
+      with:
+        # Name of the Azure Web App
+        app-name: icecreamchat-solution-lblick-webapp-lh7n4czwniybc
+        # Applies to Web App Containers only: Specify the fully qualified container image(s) name. For example, 'myregistry.azurecr.io/nginx:latest' or 'python:3.7.2-alpine/'. For multi-container scenario multiple container image names can be provided (multi-line separated)
+        images: icecreamchatsolutionlblickacrlh7n4czwniybc.azurecr.io/dev-summit/ice-cream-bot:${{ github.sha }}
+        # Enter the resource group name of the web app
+        resource-group-name: rg-icecreamchat-solution-lblick-lh7n4czwniybc
+        # Restart the app service after deployment
+        restart: true
 
     - name: Azure logout
       run: |
