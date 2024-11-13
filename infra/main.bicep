@@ -92,7 +92,7 @@ module resources 'resources.bicep' = {
     apimSkuName: apimSkuName
     appSpId: appSp.id
     location: location
-    locationBackup: 'eastus'
+    locationAI: 'eastus'
   }
 }
 
