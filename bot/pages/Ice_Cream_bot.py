@@ -12,7 +12,7 @@ import base64
 load_dotenv()
 
 AZURE_OPENAI_ACCOUNT: str                                               = os.environ["AZURE_OPENAI_API_INSTANCE_NAME"]
-AZURE_DEPLOYMENT_MODEL: str                                             = os.environ["model"]
+AZURE_DEPLOYMENT_MODEL: str                                             = os.environ["AZURE_OPEN_AI_DEPLOYMENT_MODEL"]
 AZURE_OPENAI_KEY: str                                                   = os.environ["AZURE_OPENAI_API_KEY"]
 service_endpoint                                                        = os.environ["AZURE_SEARCH_NAME"]
 index_name                                                              = os.environ["AZURE_SEARCH_INDEX_NAME"]
