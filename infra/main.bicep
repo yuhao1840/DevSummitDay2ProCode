@@ -76,7 +76,6 @@ module resources 'resources.bicep' = {
     resourceToken: resourceToken
     tags: tags
     openai_api_version: openAIApiVersion
-    openAiLocation: openAILocation
     openAiSkuName: openAISku
 //    chatGptDeploymentCapacity: chatGptDeploymentCapacity
 //    chatGptDeploymentName: chatGptDeploymentName
