@@ -11,15 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    steps:
-    
-    - name: Save short SHA
-      id: short_sha
-      run: echo ${{ github.sha::7 }}
-
-    - name: Echo short SHA
-      run: echo ${{ steps.short_sha.outputs.* }}
-  
+    steps:  
     - name: Checkout repository
       uses: actions/checkout@v2
 
