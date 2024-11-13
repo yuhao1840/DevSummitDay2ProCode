@@ -3,8 +3,8 @@ param resourceToken string
 
 param openai_api_version string
 
-param openAiLocation string
 param openAiSkuName string
+// param openAiLocation string
 // Removing model deployments
 // param chatGptDeploymentCapacity int 
 // param chatGptDeploymentName string
@@ -38,11 +38,13 @@ var webapp_name = toLower('${project}-webapp-${resourceToken}')
 var appservice_name = toLower('${project}-app-${resourceToken}')
 var aivision_name = toLower('${project}-vision-${resourceToken}')
 var apim_name  = toLower('${project}-apim-${resourceToken}')
+var appinsights_name = toLower('${project}-ai-${resourceToken}')
 
 // storage name must be < 24 chars, alphanumeric only. 'sto' is 3 and resourceToken is 13
 var clean_name = replace(replace(project, '-', ''), '_', '')
 var storage_prefix = take(clean_name, 8)
 var storage_name = toLower('${storage_prefix}sto${resourceToken}')
+
 // keyvault name must be less than 24 chars - token is 13
 var kv_prefix = take(project, 7)
 var keyVaultName = toLower('${kv_prefix}-kv-${resourceToken}')
@@ -180,6 +182,10 @@ resource webApp 'Microsoft.Web/sites@2020-06-01' = {
           name: 'AZURE_VISION_API_ENDPOINT'
           value: aiVisionService.properties.endpoint
         }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
         // Removing APIM to save on resource creation time, can add secret manually as necessary
         // {
         //   name: 'AZURE_APIM_API_KEY'
@@ -225,7 +231,17 @@ resource webDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01
     metrics: []
   }
 }
-
+// App Insights
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appinsights_name
+  location: location
+  tags: tags
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    WorkspaceResourceId: logAnalyticsWorkspace.id
+  }
+}
 // Key vault and secret creation
 resource kvFunctionAppPermissions 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: guid(kv.id, webApp.name, keyVaultSecretsOfficerRole)
