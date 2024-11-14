@@ -1,6 +1,6 @@
 // Allows use of microsoft.graph namespace for bicep and creation of App registration and Service Principal. 
 // Requires Bicep v0.30.3 or later.
-extension microsoftGraphV1_0
+// extension microsoftGraphV1_0
 
 targetScope = 'subscription'
 // Set deployment name in main.parameters.json
