@@ -17,13 +17,6 @@
         "description": "Name of the the environment which is used to generate a short unique hash used in all resources."
       }
     },
-    "project": {
-      "type": "string",
-      "minLength": 1,
-      "metadata": {
-        "description": "Name of the project"
-      }
-    },
     "location": {
       "type": "string",
       "minLength": 1,

@@ -8,7 +8,6 @@ targetScope = 'subscription'
 @maxLength(64)
 @description('Name of the the environment which is used to generate a short unique hash used in all resources.')
 param name string
-param project string
 
 param location string = 'eastus2' // Pulled from deployment or main.parameters.json
 
@@ -37,10 +36,10 @@ param storageServiceSku object = { name: 'Standard_LRS' }
 param storageServiceImageContainerName string = 'images'
 
 // Generate a unique token for the resource group
-var resourceToken = toLower(uniqueString(subscription().id, project, location))
-var resourceGroupName = 'rg-${project}-${resourceToken}'
-var appreg_name = 'appreg-${project}-${resourceToken}'
-var tags = { 'Fed-dev-Summit': project }
+var resourceToken = toLower(uniqueString(subscription().id, name, location))
+var resourceGroupName = 'rg-${name}-${resourceToken}'
+var appreg_name = 'appreg-${name}-${resourceToken}'
+var tags = { 'Fed-dev-Summit': name }
 
 // Organize resources in a resource group
 resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -72,7 +71,7 @@ module resources 'resources.bicep' = {
   name: 'all-resources'
   scope: rg
   params: {
-    project: project
+    name: name
     resourceToken: resourceToken
     tags: tags
     openai_api_version: openAIApiVersion
