@@ -27,7 +27,7 @@ This repo is for the second day pro code track for Microsoft Federal Developer S
 5. Run `cd infra` to navigate to the directory containing the bicep deployment code
 6. Run `az deployment sub create --template-file main.bicep --parameters main.parameters.json --location eastus2 --name "icecream-chat-*YOUR INITALS*"`
 
-  *note*: The `--name` parameter is a global variable used to set both the name of the deployment at the subscription level as well as the resources that are being provisioned
+  *note*: The `--name` parameter is a global variable used to set both the name of the deployment at the subscription level as well as the resources that are being provisioned.
 
   *note*: Azure OpenAI, AI Search, and Multi-service account deploy within East US. To update this value change `param locationAI string = 'eastus'` within `resources.bicep` on line #27 or specify it as an additional parameter with `locationAI="<desiredRegion>"`
 

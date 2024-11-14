@@ -26,7 +26,7 @@ param storageServiceImageContainerName string
 param location string
 param locationAI string = 'eastus'
 // Servuce Principal
-param appSpId string
+// param appSpId string
 @secure()
 
 param tags object = {}
@@ -453,15 +453,15 @@ resource acr 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
   }
 
   // Permissions and RBAC
-  resource spRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-    name: guid(resourceGroup().id, contributorRoleId)
-    scope: resourceGroup()
-    properties: {
-      roleDefinitionId: contributorRoleId
-      principalId: appSpId
-      principalType: 'ServicePrincipal'
-    }
-  }
+  // resource spRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  //   name: guid(resourceGroup().id, contributorRoleId)
+  //   scope: resourceGroup()
+  //   properties: {
+  //     roleDefinitionId: contributorRoleId
+  //     principalId: appSpId
+  //     principalType: 'ServicePrincipal'
+  //   }
+  // }
   resource AcrPullRole 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
     name: guid(webApp.id, 'AcrPull')
     scope: acr

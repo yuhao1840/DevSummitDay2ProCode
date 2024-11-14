@@ -38,7 +38,7 @@ param storageServiceImageContainerName string = 'images'
 // Generate a unique token for the resource group
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
 var resourceGroupName = 'rg-${name}-${resourceToken}'
-var appreg_name = 'appreg-${name}-${resourceToken}'
+// var appreg_name = 'appreg-${name}-${resourceToken}'
 var tags = { 'Fed-dev-Summit': name }
 
 // Organize resources in a resource group
@@ -48,23 +48,23 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   tags: tags
 }
 // Generate App Registration and Service Principal + secret
-resource appReg 'Microsoft.Graph/applications@v1.0' = {
-  uniqueName: appreg_name
-  displayName: appreg_name
-  signInAudience: 'AzureADMyOrg'
-  passwordCredentials: [
-    {
-      displayName: 'appRegKey'
-    }
-  ]
-}
-resource appSp 'Microsoft.Graph/servicePrincipals@v1.0' = {
-  appId: appReg.appId
-  servicePrincipalType: 'Application'
-  displayName: appreg_name
-  accountEnabled: true
-  appRoleAssignmentRequired: false
-}
+// resource appReg 'Microsoft.Graph/applications@v1.0' = {
+//   uniqueName: appreg_name
+//   displayName: appreg_name
+//   signInAudience: 'AzureADMyOrg'
+//   passwordCredentials: [
+//     {
+//       displayName: 'appRegKey'
+//     }
+//   ]
+// }
+// resource appSp 'Microsoft.Graph/servicePrincipals@v1.0' = {
+//   appId: appReg.appId
+//   servicePrincipalType: 'Application'
+//   displayName: appreg_name
+//   accountEnabled: true
+//   appRoleAssignmentRequired: false
+// }
 
 // Deploy all resources
 module resources 'resources.bicep' = {
@@ -88,7 +88,7 @@ module resources 'resources.bicep' = {
     storageServiceSku: storageServiceSku
     storageServiceImageContainerName: storageServiceImageContainerName
     apimSkuName: apimSkuName
-    appSpId: appSp.id
+    // appSpId: appSp.id
     location: location
     locationAI: 'eastus'
   }
@@ -96,10 +96,10 @@ module resources 'resources.bicep' = {
 
 // Output settings for the deployment
 output app_url string = resources.outputs.url // URL for the deployed app
-output appSpId string = appSp.id // Object ID for Enterprise Application, Is assigned Contributor to Resource Group
-output appRegId string = appReg.id // Object ID for App Registration
-output appServicePrincipalKey string = appReg.passwordCredentials[0].secretText // Secret for Service Principal
-output appServicePrincipalId string = appReg.appId // Application (Client) ID for Service Principal
+// output appSpId string = appSp.id // Object ID for Enterprise Application, Is assigned Contributor to Resource Group
+// output appRegId string = appReg.id // Object ID for App Registration
+// output appServicePrincipalKey string = appReg.passwordCredentials[0].secretText // Secret for Service Principal
+// output appServicePrincipalId string = appReg.appId // Application (Client) ID for Service Principal
 output azure_tenant_id string = tenant().tenantId // Tenant ID
 output azure_subscription_id string = subscription().subscriptionId // Subscription ID
 output azure_subscription_name string = subscription().displayName // Subscription ID
