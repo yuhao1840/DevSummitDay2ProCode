@@ -37,7 +37,7 @@ param storageServiceImageContainerName string = 'images'
 
 // Generate a unique token for the resource group
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
-var resourceGroupName = 'rg-${name}-${resourceToken}'
+var resourceGroupName = 'rg-hyu-12345'
 // var appreg_name = 'appreg-${name}-${resourceToken}'
 var tags = { 'Fed-dev-Summit': name }
 
