@@ -16,7 +16,8 @@ AZURE_DEPLOYMENT_MODEL: str                                             = os.env
 AZURE_OPENAI_KEY: str                                                   = os.environ["AZURE_OPENAI_API_KEY"]
 service_endpoint                                                        = os.environ["AZURE_SEARCH_NAME"]
 index_name                                                              = os.environ["AZURE_SEARCH_INDEX_NAME"]
-key                                                                     = os.environ["AZURE_OPENAI_API_KEY"]
+key                                                                     = os.environ["AZURE_SEARCH_API_KEY"]
+api_version                                                             = os.environ["AZURE_OPENAI_API_VERSION"]
 
 search_client                                                           = SearchClient(service_endpoint, index_name, AzureKeyCredential(key))
 
@@ -46,7 +47,7 @@ def chat(messages, question):
 
         client = AzureOpenAI(
             api_key=AZURE_OPENAI_KEY,  
-            api_version="2024-07-01-preview",
+            api_version=api_version,
             azure_endpoint=AZURE_OPENAI_ACCOUNT)
 
         print(GROUNDED_PROMPT.format(sources=sources_formatted))
