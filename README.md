@@ -30,6 +30,8 @@ This repo is for the second day pro code track for Microsoft Federal Developer S
   *note*: The `--name` parameter is a global variable used to set both the name of the deployment at the subscription level as well as the resources that are being provisioned
 
   *note*: Azure OpenAI, AI Search, and Multi-service account deploy within East US. To update this value change `param locationAI string = 'eastus'` within `resources.bicep` on line #27 or specify it as an additional parameter with `locationAI="<desiredRegion>"`
+
+
 After deployment is complete, which will take approximately 30-35 minutes (API Management is the long running process, the environment can start being used before that time but do not close the terminal session), copy the following outputs to a safe place for later use:
 `app_url`, `appServcePrincipalKey`, `appServicePrincipalId`, `azure_subscription_id`, `azure_subscripton_name`, and `azure_tenant_Id`
 ```json
